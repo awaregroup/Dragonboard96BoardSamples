@@ -24,10 +24,12 @@ namespace AzureIoTHubClientTPMEnd
 
 	public sealed class StartupTask : IBackgroundTask
 	{
-		string azureIoTHubUri;
-		string deviceId;
-		string sasToken;
 		private readonly TimeSpan deviceRestartPeriod = new TimeSpan(0, 0, 25);
+		private readonly TimeSpan sasTokenValidityPeriod = new TimeSpan(0, 5, 0);
+		private string azureIoTHubUri;
+		private string deviceId;
+		private string sasToken;
+		private DateTime sasTokenIssuedAtUtc;
 		private TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
 		private BackgroundTaskDeferral backgroundTaskDeferral = null;
@@ -55,11 +57,12 @@ namespace AzureIoTHubClientTPMEnd
 
 				azureIoTHubUri = myDevice.GetHostName();
 				deviceId = myDevice.GetDeviceId();
-				sasToken = myDevice.GetSASToken();
+				sasToken = myDevice.GetSASToken((uint)sasTokenValidityPeriod.TotalSeconds);
+				sasTokenIssuedAtUtc = DateTime.UtcNow;
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine($"CreateFromConnectionString failed:{ex.Message}");
+				Debug.WriteLine($"TpmDevice.GetSASToken failed:{ex.Message}");
 				return;
 			}
 
@@ -156,6 +159,39 @@ namespace AzureIoTHubClientTPMEnd
 		{
 			try
 			{
+				// Checking that SaS token isn't about to expire
+				if ((DateTime.UtcNow - sasTokenIssuedAtUtc) >= sasTokenValidityPeriod)
+				{
+					Debug.WriteLine($"{DateTime.UtcNow.ToString("hh:mm:ss")} SAS token needs renewing");
+
+					try
+					{
+						TpmDevice myDevice = new TpmDevice(0); // Use logical device 0 on the TPM
+
+						azureIoTHubUri = myDevice.GetHostName();
+						deviceId = myDevice.GetDeviceId();
+						sasToken = myDevice.GetSASToken((uint)sasTokenValidityPeriod.TotalSeconds);
+						sasTokenIssuedAtUtc = DateTime.UtcNow;
+					}
+					catch (Exception ex)
+					{
+						Debug.WriteLine($"TpmDevice.GetSASToken refresh failed:{ex.Message}");
+						return;
+					}
+
+					try
+					{
+						azureIoTHubClient = DeviceClient.Create(azureIoTHubUri, AuthenticationMethodFactory.CreateAuthenticationWithToken(deviceId, sasToken), TransportType.Mqtt);
+					}
+					catch (Exception ex)
+					{
+						Debug.WriteLine($"DeviceClient.Create with TPM info failed:{ex.Message}");
+						return;
+					}
+
+					Debug.WriteLine($"{DateTime.UtcNow.ToString("hh:mm:ss")} SAS token renewed ");
+				}
+
 				Debug.WriteLine($"{DateTime.UtcNow.ToString("hh:mm:ss")} Timer triggered " +
 							$"Temperature: {bme280Sensor.Temperature.DegreesCelsius}°C " +
 							$"Humidity: {bme280Sensor.Humidity:0.00}% " +

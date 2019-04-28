@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.AzureIoTHubClientClassEnd
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.AzureIoTHubClientAdvancedEnd", "AzureIoTHubClientAdvancedEnd\4.AzureIoTHubClientAdvancedEnd.csproj", "{AF0D3CB6-0723-4B64-AB31-711CA273111E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Security", "Security", "{09317FCC-5047-4CB7-B59C-DD4D4FF736DA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.Security", "5.Security", "{09317FCC-5047-4CB7-B59C-DD4D4FF736DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2.PIRSensorEnd", "PIRSensorEnd\2.PIRSensorEnd.csproj", "{3A242B76-09BA-4912-9E4A-AEC3C635702A}"
 EndProject
