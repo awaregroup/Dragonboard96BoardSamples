@@ -1,0 +1,21 @@
+﻿<Page
+    x:Class="UWPClientEnd.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPClientEnd"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <Viewbox Margin="30,30,30,0" Grid.RowSpan="3"/>
+        <ListBox x:Name="Measurements" HorizontalAlignment="Left" Height="228" Margin="32,83,0,0" VerticalAlignment="Top" Width="904" RenderTransformOrigin="0.337,-0.447"/>
+        <Button x:Name="Refresh" Content="Refresh" HorizontalAlignment="Left" Margin="956,177,0,0" VerticalAlignment="Top" Width="146" Height="59" Click="Refresh_Click"/>
+
+    </Grid>
+</Page>
