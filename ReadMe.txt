@@ -1,3 +1,5 @@
+NB- Don't upgrade to latest version of Microsoft.Azure.Devices.Client (i.e. later than 1.19 ) without careful testing.
+
 If DragonBoard realtime clock not set to roughly correct time all uploads will failed as SaS key invalid, follow steps here remote powershell in if 
 NTP doesn't work after rebboot
 https://stackoverflow.com/questions/30585900/how-to-set-system-time-in-windows-10-iot
