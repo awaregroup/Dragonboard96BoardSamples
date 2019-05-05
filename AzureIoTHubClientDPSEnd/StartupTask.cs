@@ -30,9 +30,6 @@ namespace AzureIoTHubClientDPSEnd
 	{
 		private readonly TimeSpan deviceRestartPeriod = new TimeSpan(0, 0, 25);
 		private readonly TimeSpan sasTokenValidityPeriod = new TimeSpan(0, 5, 0);
-//		private string azureIoTHubUri;
-//		private string deviceId;
-//		private string sasToken;
 		private DateTime sasTokenIssuedAtUtc;
 		private TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
