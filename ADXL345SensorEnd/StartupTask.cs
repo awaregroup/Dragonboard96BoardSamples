@@ -43,10 +43,10 @@ namespace ADXL345SensorEnd
 			{
 				Adxl345.Acceleration acceleration = adxl345.Read();
 
-				Debug.WriteLine($"{DateTime.UtcNow.ToShortTimeString()} Timer triggered " +
-							$"X:{acceleration.X:0.00}G " +
-							$"Y:{acceleration.Y:0.00}G " +
-							$"Z:{acceleration.Z:0.00}G ");
+				Debug.WriteLine($"{DateTime.UtcNow.ToString("HH:mm:ss")} " +
+							$" X:{acceleration.X:0.00}G" +
+							$" Y:{acceleration.Y:0.00}G" +
+							$" Z:{acceleration.Z:0.00}G");
 			}
 			catch (Exception ex)
 			{
