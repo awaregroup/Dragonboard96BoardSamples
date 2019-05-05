@@ -7,8 +7,8 @@ namespace Sensors
 
 	enum Register :byte
 	{
-		DataFormat = 0x01,
 		PowerControl = 0x2D,
+		DataFormat = 0x31,
 		XAxisData = 0x32,
 		YAxisData = 0x34,
 		ZAxisData = 0x36,
