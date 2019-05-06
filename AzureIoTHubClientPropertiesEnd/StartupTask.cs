@@ -2,6 +2,10 @@
 //  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
+//
+// Grove BME280 Sensor in I2C1 (3V3)
+//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+//
 namespace AzureIoTHubClientPropertiesEnd
 {
 	using System;
@@ -22,7 +26,7 @@ namespace AzureIoTHubClientPropertiesEnd
 
 	public sealed class StartupTask : IBackgroundTask
 	{
-		private const string AzureIoTHubConnectionString = "HostName=Build2019Test.azure-devices.net;DeviceId=DragonBoard410C;SharedAccessKey=SuEwxR79vrt/GE32ZjKW3SeqeGMFt+5qX4tK0WXBDIg=";
+		private const string AzureIoTHubConnectionString = "HostName=Build2019Test.azure-devices.net;DeviceId=DragonBoard410C;SharedAccessKey=ewbUCMtd6Blau9vaQBqO/J6GlSxgbxPM5aWRgZz6N7c=";
 		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
 		private BackgroundTaskDeferral backgroundTaskDeferral = null;
@@ -98,16 +102,20 @@ namespace AzureIoTHubClientPropertiesEnd
 		{
 			try
 			{
-				Debug.WriteLine($"{DateTime.UtcNow.ToString("hh:mm:ss")} Timer triggered " +
-							$"Temperature: {bme280Sensor.Temperature.DegreesCelsius}°C " +
-							$"Humidity: {bme280Sensor.Humidity:0.00}% " +
-							$"AirPressure: {bme280Sensor.Pressure.Kilopascals}KPa ");
+				UnitsNet.Temperature temperature = bme280Sensor.Temperature;
+				double humidity = bme280Sensor.Humidity;
+				UnitsNet.Pressure airPressure = bme280Sensor.Pressure;
 
-				SensorPayload sensorPayload = new SensorPayload()
+				Debug.WriteLine($"{DateTime.UtcNow.ToLongTimeString()} Timer triggered " +
+							$"Temperature: {temperature.DegreesCelsius:0.0}°C {temperature.DegreesFahrenheit:0.0}°F " +
+							$"Humidity: {humidity:0.0}% " +
+							$"AirPressure: {airPressure.Kilopascals:0.000}KPa ");
+
+				SensorPayloadDto sensorPayload = new SensorPayloadDto()
 				{
-					Temperature = bme280Sensor.Temperature.DegreesCelsius,
-					Humidity = bme280Sensor.Humidity,
-					AirPressure = bme280Sensor.Pressure.Kilopascals
+					Temperature = temperature.DegreesCelsius,
+					Humidity = humidity,
+					AirPressure = airPressure.Kilopascals
 				};
 
 				string payloadText = JsonConvert.SerializeObject(sensorPayload);
@@ -126,7 +134,7 @@ namespace AzureIoTHubClientPropertiesEnd
 		}
 	}
 
-	public sealed class SensorPayload
+	public sealed class SensorPayloadDto
 	{
 		public double Temperature { get; set; }
 		public double Humidity { get; set; }

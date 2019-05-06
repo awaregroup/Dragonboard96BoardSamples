@@ -2,6 +2,18 @@
 //  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
+//
+// Grove BME280 Sensor in I2C1 (3V3)
+//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+//
+// Grove LED in socket G4
+//		https://www.seeedstudio.com/Grove-Red-LED-p-1142.html
+//		https://www.seeedstudio.com/Grove-Green-LED.html
+//		https://www.seeedstudio.com/Grove-Blue-LED.html
+//		https://www.seeedstudio.com/Grove-White-LED-p-1140.html
+//
+// Toggle the status of the LED with an "ActuatorToggle" method calls and remotely reboot the device with a "RestartDevice" method call
+//
 namespace AzureIoTHubClientMethodHandlerEnd
 {
 	using System;
@@ -23,7 +35,7 @@ namespace AzureIoTHubClientMethodHandlerEnd
 		private const string AzureIoTHubConnectionString = "HostName=Build2019Test.azure-devices.net;DeviceId=DragonBoard410C;SharedAccessKey=SuEwxR79vrt/GE32ZjKW3SeqeGMFt+5qX4tK0WXBDIg=";
 		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
-		private readonly TimeSpan DeviceRestartPeriod = new TimeSpan(0, 0, 25);
+		private readonly TimeSpan DeviceRestartPeriod = new TimeSpan(0, 0, 45);
 		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 		private BME280 bme280Sensor;
 		private Timer bme280InputPollingTimer;
@@ -49,6 +61,7 @@ namespace AzureIoTHubClientMethodHandlerEnd
 				GpioController gpioController = GpioController.GetDefault();
 				outputGpioPin = gpioController.OpenPin(outputGpioPinNumber);
 				outputGpioPin.SetDriveMode(GpioPinDriveMode.Output);
+				outputGpioPin.Write(GpioPinValue.Low);
 			}
 			catch (Exception ex)
 			{
@@ -69,7 +82,7 @@ namespace AzureIoTHubClientMethodHandlerEnd
 
 			try
 			{
-				azureIoTHubClient.SetMethodHandlerAsync("Restart", RestartAsync, null);
+				azureIoTHubClient.SetMethodHandlerAsync("RestartDevice", RestartAsync, null);
 			}
 			catch (Exception ex)
 			{
@@ -97,16 +110,20 @@ namespace AzureIoTHubClientMethodHandlerEnd
 		{
 			try
 			{
-				Debug.WriteLine($"{DateTime.UtcNow.ToString("hh:mm:ss")} Timer triggered " +
-							$"Temperature: {bme280Sensor.Temperature.DegreesCelsius}°C " +
-							$"Humidity: {bme280Sensor.Humidity:0.00}% " +
-							$"AirPressure: {bme280Sensor.Pressure.Kilopascals}KPa ");
+				UnitsNet.Temperature temperature = bme280Sensor.Temperature;
+				double humidity = bme280Sensor.Humidity;
+				UnitsNet.Pressure airPressure = bme280Sensor.Pressure;
+
+				Debug.WriteLine($"{DateTime.UtcNow.ToLongTimeString()} Timer triggered " +
+							$"Temperature: {temperature.DegreesCelsius:0.0}°C {temperature.DegreesFahrenheit:0.0}°F " +
+							$"Humidity: {humidity:0.0}% " +
+							$"AirPressure: {airPressure.Kilopascals:0.000}KPa ");
 
 				SensorPayloadDto sensorPayload = new SensorPayloadDto()
 				{
-					Temperature = bme280Sensor.Temperature.DegreesCelsius,
-					Humidity = bme280Sensor.Humidity,
-					AirPressure = bme280Sensor.Pressure.Kilopascals
+					Temperature = temperature.DegreesCelsius,
+					Humidity = humidity,
+					AirPressure = airPressure.Kilopascals
 				};
 
 				string payloadText = JsonConvert.SerializeObject(sensorPayload);
