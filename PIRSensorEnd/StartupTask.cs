@@ -3,6 +3,10 @@
 // DragonBoard Windows 10 pin mappings 
 //		https://docs.microsoft.com/en-us/windows/iot-core/learn-about-hardware/pinmappings/pinmappingsdb
 //
+// Grove Mini PIR Motion Sensor in G3 
+//		https://www.seeedstudio.com/Grove-mini-PIR-motion-sensor-p-2930.html
+//	Occupancy detection for Smart Builidng scenario
+//
 namespace PIRSensorEnd
 {
 	using System;

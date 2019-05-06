@@ -2,6 +2,11 @@
 // https://www.seeedstudio.com/Grove-3-Axis-Digital-Accelerometer-16g-p-1156.html
 // Minimal implementation insipred by I2C/SPI version in
 // https://github.com/Microsoft/Windows-iotcore-samples
+//
+// Grove +-16G Accelerometer (ADXL345) socket I2C1 (3v3)
+//		https://www.seeedstudio.com/Grove-3-Axis-Digital-Accelerometer-16g-p-1156.html
+//	SmartBuilding earthquake deflection & machinery vibration monitoring scenarios
+//
 namespace ADXL345SensorEnd
 {
 	using System;
