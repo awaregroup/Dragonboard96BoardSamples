@@ -2,9 +2,9 @@
 //		https://github.com/96boards/96boards-sensors/raw/master/Sensors.pdf
 // DragonBoard Windows 10 pin mappings 
 //		https://docs.microsoft.com/en-us/windows/iot-core/learn-about-hardware/pinmappings/pinmappingsdb
-// Seeedstudio Ear-clip Heart Rate Sensor
+// Seeedstudio Ear-clip Heart Rate Sensor in G3
 //    https://www.seeedstudio.com/Grove-Ear-clip-Heart-Rate-Sensor-p-1116.html
-// Seeedstudio LED one of
+// Seeedstudio LED one of in G4
 //    https://www.seeedstudio.com/Grove-Red-LED-p-1142.html
 //    https://www.seeedstudio.com/Grove-White-LED-p-1140.html
 //    https://www.seeedstudio.com/Grove-Blue-LED.html<summary>
@@ -28,7 +28,7 @@ namespace HeartRateSensorEnd
 
 	public sealed class StartupTask : IBackgroundTask
 	{
-		private const string AzureIoTHubConnectionString = "HostName=Build2019Test.azure-devices.net;DeviceId=DragonBoard410C;SharedAccessKey=SuEwxR79vrt/GE32ZjKW3SeqeGMFt+5qX4tK0WXBDIg=";
+		private const string AzureIoTHubConnectionString = "HostName=Build2019Test.azure-devices.net;DeviceId=DragonBoard410C;SharedAccessKey=ewbUCMtd6Blau9vaQBqO/J6GlSxgbxPM5aWRgZz6N7c=";
 		private DeviceClient azureIoTHubClient = null;
 		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 		private readonly TimeSpan timerPeriodLedIlluminated = new TimeSpan(0, 0, 0, 0, 10);
@@ -113,7 +113,7 @@ namespace HeartRateSensorEnd
 			Debug.WriteLine($" {bpm:0}BPM");
 
 			// Prepare the payload for sending to Azure IoT Hub
-			SensorPayload sensorPayload = new SensorPayload()
+			SensorPayloadDto sensorPayload = new SensorPayloadDto()
 			{
 				UpdatedAtUtC = currentTime,
 				Bpm = bpm
@@ -136,7 +136,7 @@ namespace HeartRateSensorEnd
 			}
 		}
 
-		private class SensorPayload
+		private class SensorPayloadDto
 		{
 			[JsonProperty(propertyName: "UpdatedAtUTC")]
 			public DateTime UpdatedAtUtC { get; set; }

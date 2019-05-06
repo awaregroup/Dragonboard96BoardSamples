@@ -2,15 +2,16 @@
 //		https://github.com/96boards/96boards-sensors/raw/master/Sensors.pdf
 // DragonBoard Windows 10 pin mappings 
 //		https://docs.microsoft.com/en-us/windows/iot-core/learn-about-hardware/pinmappings/pinmappingsdb
-// Seeedstudio Ear-clip Heart Rate Sensor
+// Seeedstudio Ear-clip Heart Rate Sensor in G3
 //    https://www.seeedstudio.com/Grove-Ear-clip-Heart-Rate-Sensor-p-1116.html
-// Seeedstudio LED one of
+// Seeedstudio LED one of in G4
 //    https://www.seeedstudio.com/Grove-Red-LED-p-1142.html
 //    https://www.seeedstudio.com/Grove-White-LED-p-1140.html
 //    https://www.seeedstudio.com/Grove-Blue-LED.html<summary>
 //    https://www.seeedstudio.com/Grove-White-LED-p-1140.html
 //
 // Make the LED Flash on for a set period each heart beat. Heart beat pulse turns on LED and starts timer to turn it off
+// The use the time between heartbeats to work out the pulse rate.
 //
 namespace HeartRateSensorInstantaneous
 {
