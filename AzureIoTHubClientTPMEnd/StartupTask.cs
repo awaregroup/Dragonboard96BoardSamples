@@ -2,6 +2,14 @@
 //  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
+//
+// Connection string set in Device TPM using code or IoT Dashboard -> Device Portal
+//
+// Grove BME280 Sensor in I2C1 (3V3)
+//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+//
+// Set TimerDue & TimerPeriod using sample JSON on readme.txt file
+//
 namespace AzureIoTHubClientTPMEnd
 {
 	using System;
@@ -192,16 +200,20 @@ namespace AzureIoTHubClientTPMEnd
 					Debug.WriteLine($"{DateTime.UtcNow.ToString("hh:mm:ss")} SAS token renewed ");
 				}
 
-				Debug.WriteLine($"{DateTime.UtcNow.ToString("hh:mm:ss")} Timer triggered " +
-							$"Temperature: {bme280Sensor.Temperature.DegreesCelsius}°C " +
-							$"Humidity: {bme280Sensor.Humidity:0.00}% " +
-							$"AirPressure: {bme280Sensor.Pressure.Kilopascals}KPa ");
+				UnitsNet.Temperature temperature = bme280Sensor.Temperature;
+				double humidity = bme280Sensor.Humidity;
+				UnitsNet.Pressure airPressure = bme280Sensor.Pressure;
+
+				Debug.WriteLine($"{DateTime.UtcNow.ToLongTimeString()} Timer triggered " +
+							$"Temperature: {temperature.DegreesCelsius:0.0}°C {temperature.DegreesFahrenheit:0.0}°F " +
+							$"Humidity: {humidity:0.0}% " +
+							$"AirPressure: {airPressure.Kilopascals:0.000}KPa ");
 
 				SensorPayloadDto sensorPayload = new SensorPayloadDto()
 				{
-					Temperature = bme280Sensor.Temperature.DegreesCelsius,
-					Humidity = bme280Sensor.Humidity,
-					AirPressure = bme280Sensor.Pressure.Kilopascals
+					Temperature = temperature.DegreesCelsius,
+					Humidity = humidity,
+					AirPressure = airPressure.Kilopascals
 				};
 
 				string payloadText = JsonConvert.SerializeObject(sensorPayload);

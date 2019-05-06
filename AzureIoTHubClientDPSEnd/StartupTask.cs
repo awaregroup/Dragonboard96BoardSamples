@@ -2,6 +2,10 @@
 //  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
+//
+// Grove BME280 Sensor in I2C1 (3V3)
+//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+//
 namespace AzureIoTHubClientDPSEnd
 {
 	using System;
@@ -10,9 +14,11 @@ namespace AzureIoTHubClientDPSEnd
 	using System.Threading;
 	using System.Threading.Tasks;
 
+	using Microsoft.Azure.Devices.Client;
 	using Microsoft.Azure.Devices.Provisioning.Client;
 	using Microsoft.Azure.Devices.Provisioning.Client.Transport;
 	using Microsoft.Azure.Devices.Provisioning.Security;
+	using Microsoft.Azure.Devices.Provisioning.Service;
 	using Microsoft.Azure.Devices.Shared;
 	using Microsoft.Devices.Tpm;
 	using Windows.ApplicationModel;
@@ -23,8 +29,6 @@ namespace AzureIoTHubClientDPSEnd
 
 	using Glovebox.IoT.Devices.Sensors;
 	using Newtonsoft.Json;
-	using Microsoft.Azure.Devices.Client;
-	using Microsoft.Azure.Devices.Provisioning.Service;
 
 	public sealed class StartupTask : IBackgroundTask
 	{
