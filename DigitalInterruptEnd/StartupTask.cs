@@ -3,6 +3,14 @@
 // DragonBoard Windows 10 pin mappings 
 //		https://docs.microsoft.com/en-us/windows/iot-core/learn-about-hardware/pinmappings/pinmappingsdb
 //
+//	Grove button in G3
+//		https://www.seeedstudio.com/Grove-Button-P.html
+//		https://www.seeedstudio.com/Grove-Red-LED-Button.html
+//		https://www.seeedstudio.com/Grove-Blue-LED-Button-p-3104.html
+//		https://www.seeedstudio.com/Grove-Yellow-LED-Button-p-3101.html
+//		https://www.seeedstudio.com/Grove-Mech-Keycap.html
+//		https://www.seeedstudio.com/Grove-Touch-Sensor.html
+//
 namespace DigitalInterruptEnd
 {
 	using System;
