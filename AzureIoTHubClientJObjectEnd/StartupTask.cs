@@ -2,6 +2,12 @@
 //  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
+//
+// Grove BME280 Sensor in I2C1 (3V3)
+//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+//
+// Limited control over formatting of payload but really good for constructing complex/flexible payloads on the fly.
+//
 namespace AzureIoTHubClientJObjectEnd
 {
 	using System;
@@ -12,8 +18,8 @@ namespace AzureIoTHubClientJObjectEnd
 	using Microsoft.Azure.Devices.Client;
 	using Windows.ApplicationModel.Background;
 
-	using Newtonsoft.Json;
 	using Glovebox.IoT.Devices.Sensors;
+	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public sealed class StartupTask : IBackgroundTask
@@ -59,16 +65,22 @@ namespace AzureIoTHubClientJObjectEnd
 		{
 			try
 			{
-				JObject payloadJObject = new JObject();
+				UnitsNet.Temperature temperature = bme280Sensor.Temperature;
+				double humidity = bme280Sensor.Humidity;
+				UnitsNet.Pressure airPressure = bme280Sensor.Pressure;
 
 				Debug.WriteLine($"{DateTime.UtcNow.ToLongTimeString()} Timer triggered " +
-							$"Temperature: {bme280Sensor.Temperature.DegreesCelsius}°C " +
-							$"Humidity: {bme280Sensor.Humidity:0.00}% " +
-							$"AirPressure: {bme280Sensor.Pressure.Kilopascals}KPa ");
+							$"Temperature: {temperature.DegreesCelsius:0.0}°C {temperature.DegreesFahrenheit:0.0}°F " +
+							$"Humidity: {humidity:0.0}% " +
+							$"AirPressure: {airPressure.Kilopascals:0.000}KPa ");
 
-				payloadJObject.Add("Temperature", bme280Sensor.Temperature.DegreesCelsius);
-				payloadJObject.Add("Humidity", bme280Sensor.Humidity);
-				payloadJObject.Add("AirPressure", bme280Sensor.Pressure.Kilopascals);
+				JObject payloadJObject = new JObject
+				{
+					{ "TemperatureC", temperature.DegreesCelsius },
+					{ "TemperatureF", temperature.DegreesFahrenheit },
+					{ "Humidity", humidity },
+					{ "AirPressureKPa", airPressure.Kilopascals }
+				};
 
 				string payloadText = JsonConvert.SerializeObject(payloadJObject);
 

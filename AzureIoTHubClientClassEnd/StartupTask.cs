@@ -2,6 +2,12 @@
 //  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
+//
+// Grove BME280 Sensor in I2C1 (3V3)
+//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+//
+// Low overhead with fine grained control over formatting of payload but harder to construct complex/flexible payloads on the fly.
+//
 namespace AzureIoTHubClientClassEnd
 {
 	using System;
@@ -58,16 +64,20 @@ namespace AzureIoTHubClientClassEnd
 		{
 			try
 			{
-				Debug.WriteLine($"{DateTime.UtcNow.ToString("hh:mm:ss")} Timer triggered " +
-							$"Temperature: {bme280Sensor.Temperature.DegreesCelsius}°C " +
-							$"Humidity: {bme280Sensor.Humidity:0.00}% " +
-							$"AirPressure: {bme280Sensor.Pressure.Kilopascals}KPa ");
+				UnitsNet.Temperature temperature = bme280Sensor.Temperature;
+				double humidity = bme280Sensor.Humidity;
+				UnitsNet.Pressure airPressure = bme280Sensor.Pressure;
+
+				Debug.WriteLine($"{DateTime.UtcNow.ToLongTimeString()} Timer triggered " +
+							$"Temperature: {temperature.DegreesCelsius:0.0}°C {temperature.DegreesFahrenheit:0.0}°F " +
+							$"Humidity: {humidity:0.0}% " +
+							$"AirPressure: {airPressure.Kilopascals:0.000}KPa ");
 
 				SensorPayload sensorPayload = new SensorPayload()
 				{
-					Temperature = bme280Sensor.Temperature.DegreesCelsius,
-					Humidity = bme280Sensor.Humidity,
-					AirPressure = bme280Sensor.Pressure.Kilopascals
+					Temperature = temperature.DegreesCelsius,
+					Humidity = humidity,
+					AirPressure = airPressure.Kilopascals
 				};
 
 				string payloadText = JsonConvert.SerializeObject(sensorPayload);

@@ -2,6 +2,13 @@
 //  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
+//
+// Grove BME280 Sensor in I2C1 (3V3)
+//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+//
+// Low dependency and lots of control over payload format e.g. no dps on humidity. But with power comes responsibility easy to 
+// mess up formattting/escaping of data.
+//
 namespace AzureIoTHubClientEnd
 {
 	using System;
@@ -55,15 +62,19 @@ namespace AzureIoTHubClientEnd
 		{
 			try
 			{
+				UnitsNet.Temperature temperature = bme280Sensor.Temperature;
+				double humidity = bme280Sensor.Humidity;
+				UnitsNet.Pressure airPressure = bme280Sensor.Pressure;
+
 				Debug.WriteLine($"{DateTime.UtcNow.ToLongTimeString()} Timer triggered " +
-							$"Temperature: {bme280Sensor.Temperature.DegreesCelsius}°C " +
-							$"Humidity: {bme280Sensor.Humidity:0.00}% " +
-							$"Air pressure: {bme280Sensor.Pressure.Kilopascals}KPa ");
+							$"Temperature: {temperature.DegreesCelsius:0.0}°C {temperature.DegreesFahrenheit:0.0}°F " +
+							$"Humidity: {humidity:0.0}% " +
+							$"AirPressure: {airPressure.Kilopascals:0.000}KPa ");
 
 				// Manually construct JSON payload, not recomended
-				string payloadText = @"{""Temperature"":" + bme280Sensor.Temperature.DegreesCelsius.ToString("f1") +
-											@",""Humidity"":" + bme280Sensor.Humidity.ToString("F0") +
-											@",""AirPressure"":" + bme280Sensor.Pressure.Kilopascals.ToString("F1") +
+				string payloadText = @"{""Temperature"":" + temperature.DegreesCelsius.ToString("f1") +
+											@",""Humidity"":" + humidity.ToString("F0") +
+											@",""AirPressure"":" + airPressure.Kilopascals.ToString("F3") +
 											@"}";
 
 				using (var message = new Message(Encoding.ASCII.GetBytes(payloadText)))
