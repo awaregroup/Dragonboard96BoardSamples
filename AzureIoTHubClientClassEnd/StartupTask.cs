@@ -23,7 +23,7 @@ namespace AzureIoTHubClientClassEnd
 
 	public sealed class StartupTask : IBackgroundTask
 	{
-		private const string AzureIoTHubConnectionString = "HostName=Build2019Test.azure-devices.net;DeviceId=DragonBoard410C;SharedAccessKey=SuEwxR79vrt/GE32ZjKW3SeqeGMFt+5qX4tK0WXBDIg=";
+		private const string AzureIoTHubConnectionString = "HostName=Build2019Test.azure-devices.net;DeviceId=DragonBoard410C;SharedAccessKey=ewbUCMtd6Blau9vaQBqO/J6GlSxgbxPM5aWRgZz6N7c=";
 		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
 		private BackgroundTaskDeferral backgroundTaskDeferral = null;
