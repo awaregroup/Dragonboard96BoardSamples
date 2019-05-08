@@ -1,40 +1,41 @@
-﻿// BME280 sensor - Temperature, Humidity and Air pressure
-//  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
+﻿// TODO : Customer friendly (C) notice required
+// BME280 sensor - Temperature, Humidity and Air pressure
+// https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
 //
 // Grove BME280 Sensor in I2C1 (3V3)
-//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+// https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
 //
 namespace SensorServerEnd
 {
 	using System;
 	using System.Diagnostics;
 	using System.Threading;
-	using Windows.ApplicationModel.Background;
-	using Glovebox.IoT.Devices.Sensors;
 	using Windows.ApplicationModel.AppService;
+	using Windows.ApplicationModel.Background;
 	using Windows.Foundation.Collections;
+
+	using Glovebox.IoT.Devices.Sensors;
 
 	public sealed class StartupTask : IBackgroundTask
 	{
-		private AppServiceConnection connection = null;
-		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 		private static BME280 bme280Sensor;
 		private static Timer bme280InputPollingTimer;
-		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
-		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
 		private static DateTime? lastUpdatedAtUTC = null;
 		private static double temperature;
 		private static double humidity;
 		private static double airPressure;
+		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
+		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
+		private AppServiceConnection connection = null;
+		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 
 		public void Run(IBackgroundTaskInstance taskInstance)
 		{
 			backgroundTaskDeferral = taskInstance.GetDeferral();
 			taskInstance.Canceled += TaskInstance_Canceled;
 
-			//Print out the FamilyName
 			Debug.WriteLine(Windows.ApplicationModel.Package.Current.Id.FamilyName);
 
 			// Setup the BME280 sensor and timer
@@ -57,10 +58,10 @@ namespace SensorServerEnd
 			{
 				Debug.WriteLine("appServiceTrigger != null");
 
-				//Verify that the app service connection is requesting the "" that this class provides
+				// Verify that the app service connection is requesting the "" that this class provides
 				if (appServiceTrigger.Name.Equals("SensorServerEnd"))
 				{
-					//Store the connection and subscribe to the "RequestRecieved" event to be notified when clients send messages
+					// Store the connection and subscribe to the "RequestRecieved" event to be notified when clients send messages
 					connection = appServiceTrigger.AppServiceConnection;
 					connection.RequestReceived += Connection_RequestReceived;
 				}
@@ -125,4 +126,3 @@ namespace SensorServerEnd
 		}
 	}
 }
-

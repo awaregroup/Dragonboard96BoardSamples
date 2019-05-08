@@ -33,7 +33,6 @@ namespace HCSR04SensorEnd
 		private Timer hcsr04InputPollingTimer;
 		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 
-
 		public void Run(IBackgroundTaskInstance taskInstance)
 		{
 			try
