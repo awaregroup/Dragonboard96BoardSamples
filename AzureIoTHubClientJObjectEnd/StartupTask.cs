@@ -1,10 +1,11 @@
-﻿// BME280 sensor - Temperature, Humidity and Air pressure
-//  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
+﻿// TODO : Customer friendly (C) notice required
+// BME280 sensor - Temperature, Humidity and Air pressure
+// https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
 //
 // Grove BME280 Sensor in I2C1 (3V3)
-//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+// https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
 //
 // Limited control over formatting of payload but really good for constructing complex/flexible payloads on the fly.
 //
@@ -57,7 +58,7 @@ namespace AzureIoTHubClientJObjectEnd
 
 			bme280InputPollingTimer = new Timer(SensorUpdateTimerCallback, null, timerDue, timerPeriod);
 
-			//enable task to continue running in background
+			// enable task to continue running in background
 			backgroundTaskDeferral = taskInstance.GetDeferral();
 		}
 
@@ -79,7 +80,7 @@ namespace AzureIoTHubClientJObjectEnd
 					{ "TemperatureC", temperature.DegreesCelsius },
 					{ "TemperatureF", temperature.DegreesFahrenheit },
 					{ "Humidity", humidity },
-					{ "AirPressureKPa", airPressure.Kilopascals }
+					{ "AirPressureKPa", airPressure.Kilopascals },
 				};
 
 				string payloadText = JsonConvert.SerializeObject(payloadJObject);
