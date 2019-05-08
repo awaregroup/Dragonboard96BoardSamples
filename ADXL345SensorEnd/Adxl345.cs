@@ -1,11 +1,12 @@
-﻿
+﻿// TODO : Customer friendly (C) notice required
+// Simple minimal functionality low dependency lirbary from Analog devices ADXL345 3 Axis Accelerometer
 namespace Sensors
 {
 	using System;
 	using Windows.Devices.Enumeration;
 	using Windows.Devices.I2c;
 
-	enum Register :byte
+	enum Register : byte
 	{
 		PowerControl = 0x2D,
 		DataFormat = 0x31,
@@ -38,32 +39,32 @@ namespace Sensors
 			}
 
 			// 0x01 sets range to +- 4Gs 
-			byte[] writeBufferDataFormat = new byte[] {(byte)Register.DataFormat, 0x01 }; 
+			byte[] writeBufferDataFormat = new byte[] { (byte)Register.DataFormat, 0x01 }; 
 			I2CAccelerometer.Write(writeBufferDataFormat);
 
 			// 0x08 puts the accelerometer into measurement mode
-			byte[] writeBufferPowerControl = new byte[] {(byte)Register.PowerControl, 0x08 }; 
+			byte[] writeBufferPowerControl = new byte[] { (byte)Register.PowerControl, 0x08 }; 
 			I2CAccelerometer.Write(writeBufferPowerControl);
 		}
 
 		public Acceleration Read()
 		{
-			byte[] ReadBuf = new byte[6];  
-			byte[] RegAddrBuf = new byte[] { (byte)Register.XAxisData }; 
+			byte[] readBuffer = new byte[6];  
+			byte[] regAddressBuffer = new byte[] { (byte)Register.XAxisData }; 
 
-			I2CAccelerometer.WriteRead(RegAddrBuf, ReadBuf);
+			I2CAccelerometer.WriteRead(regAddressBuffer, readBuffer);
 
 			/* In order to get the raw 16-bit data values, we need to concatenate two 8-bit bytes for each axis */
-			short AccelerationRawX = BitConverter.ToInt16(ReadBuf, 0);
-			short AccelerationRawY = BitConverter.ToInt16(ReadBuf, 2);
-			short AccelerationRawZ = BitConverter.ToInt16(ReadBuf, 4);
+			short accelerationRawX = BitConverter.ToInt16(readBuffer, 0);
+			short accelerationRawY = BitConverter.ToInt16(readBuffer, 2);
+			short accelerationRawZ = BitConverter.ToInt16(readBuffer, 4);
 
 			/* Convert raw values to G's */
 			Acceleration accel = new Acceleration()
 			{
-				X = (double)AccelerationRawX / UnitsPerG,
-				Y = (double)AccelerationRawY / UnitsPerG,
-				Z = (double)AccelerationRawZ / UnitsPerG,
+				X = (double)accelerationRawX / UnitsPerG,
+				Y = (double)accelerationRawY / UnitsPerG,
+				Z = (double)accelerationRawZ / UnitsPerG,
 			};
 
 			return accel;
@@ -75,7 +76,6 @@ namespace Sensors
 			{
 				I2CAccelerometer.Dispose();
 			}
-
 		}
 
 		public struct Acceleration
@@ -83,8 +83,6 @@ namespace Sensors
 			public double X;
 			public double Y;
 			public double Z;
-		};
+		}
 	}
 }
-
-

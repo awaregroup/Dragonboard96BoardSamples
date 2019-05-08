@@ -1,19 +1,20 @@
-﻿// 96 board schematic 
-//		https://github.com/96boards/96boards-sensors/raw/master/Sensors.pdf
+﻿// TODO : Customer friendly (C) notice required
+// 96 board schematic 
+// https://github.com/96boards/96boards-sensors/raw/master/Sensors.pdf
 // DragonBoard Windows 10 pin mappings 
-//		https://docs.microsoft.com/en-us/windows/iot-core/learn-about-hardware/pinmappings/pinmappingsdb
+// https://docs.microsoft.com/en-us/windows/iot-core/learn-about-hardware/pinmappings/pinmappingsdb
 //
-//	Elecrow HCRS04 sensor in Socket G1 (5V)
-//		https://www.elecrow.com/crowtail-ultrasonic-ranging-sensor.html
-//			or
+// Elecrow HCRS04 sensor in Socket G1 (5V)
+// https://www.elecrow.com/crowtail-ultrasonic-ranging-sensor.html
+//  or
 //
-//		https://www.seeedstudio.com/Grove-4-pin-Female-Jumper-to-Grove-4-pin-Conversion-Cable-5-PCs-per-PAck.html
-//			with
-//		https://www.elecrow.com/hcsr04-ultrasonic-ranging-sensor-p-316.html
+// https://www.seeedstudio.com/Grove-4-pin-Female-Jumper-to-Grove-4-pin-Conversion-Cable-5-PCs-per-PAck.html
+//  with
+// https://www.elecrow.com/hcsr04-ultrasonic-ranging-sensor-p-316.html
 //
 // Weatherproof option for river or water tank levels for SmartAg/Smart City applications
-//		https://www.elecrow.com/water-proof-integrated-ultrasonic-ranging-module-jsnsr04t-p-1151.html
-//		https://www.elecrow.com/water-proof-integrated-ultrasonic-ranging-module-jsnb02-p-1202.html
+// https://www.elecrow.com/water-proof-integrated-ultrasonic-ranging-module-jsnsr04t-p-1151.html
+// https://www.elecrow.com/water-proof-integrated-ultrasonic-ranging-module-jsnb02-p-1202.html
 //
 namespace HCSR04SensorEnd
 {
@@ -28,15 +29,16 @@ namespace HCSR04SensorEnd
 	{
 		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 15);
-		private BackgroundTaskDeferral backgroundTaskDeferral = null;
-		private  HCSR04 hcsr04;
+		private HCSR04 hcsr04;
 		private Timer hcsr04InputPollingTimer;
+		private BackgroundTaskDeferral backgroundTaskDeferral = null;
+
 
 		public void Run(IBackgroundTaskInstance taskInstance)
 		{
 			try
 			{
-				hcsr04 = new HCSR04(12,36);
+				hcsr04 = new HCSR04(12, 36);
 			}
 			catch (Exception ex)
 			{

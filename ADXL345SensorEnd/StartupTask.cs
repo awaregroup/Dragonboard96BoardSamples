@@ -1,28 +1,29 @@
-﻿// ADXL345 sensor - X,Y & Z acceleration at upto +-16G
+﻿// TODO : Customer friendly (C) notice required
+// ADXL345 sensor - X,Y & Z acceleration at upto +-16G
 // https://www.seeedstudio.com/Grove-3-Axis-Digital-Accelerometer-16g-p-1156.html
 // Minimal implementation insipred by I2C/SPI version in
 // https://github.com/Microsoft/Windows-iotcore-samples
 //
 // Grove +-16G Accelerometer (ADXL345) socket I2C1 (3v3)
-//		https://www.seeedstudio.com/Grove-3-Axis-Digital-Accelerometer-16g-p-1156.html
-//	SmartBuilding earthquake deflection & machinery vibration monitoring scenarios
+// https://www.seeedstudio.com/Grove-3-Axis-Digital-Accelerometer-16g-p-1156.html
+// SmartBuilding earthquake deflection & machinery vibration monitoring scenarios
 //
 namespace ADXL345SensorEnd
 {
 	using System;
-	using System.Threading;
 	using System.Diagnostics;
+	using System.Threading;
 	using Windows.ApplicationModel.Background;
 
 	using Sensors;
 
 	public sealed class StartupTask : IBackgroundTask
 	{
-		private BackgroundTaskDeferral backgroundTaskDeferral = null;
-		private Adxl345 adxl345 = new Adxl345();
-		private Timer adxl345InputPollingTimer;
 		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 1);
+		private Adxl345 adxl345 = new Adxl345();
+		private Timer adxl345InputPollingTimer;
+		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 
 		public void Run(IBackgroundTaskInstance taskInstance)
 		{

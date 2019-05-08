@@ -1,11 +1,12 @@
-﻿// 96 board schematic 
-//		https://github.com/96boards/96boards-sensors/raw/master/Sensors.pdf
+﻿// TODO : Customer friendly (C) notice required
+// 96 board schematic 
+// https://github.com/96boards/96boards-sensors/raw/master/Sensors.pdf
 // DragonBoard Windows 10 pin mappings 
-//		https://docs.microsoft.com/en-us/windows/iot-core/learn-about-hardware/pinmappings/pinmappingsdb
+// https://docs.microsoft.com/en-us/windows/iot-core/learn-about-hardware/pinmappings/pinmappingsdb
 //
 // Grove Mini PIR Motion Sensor in G3 
-//		https://www.seeedstudio.com/Grove-mini-PIR-motion-sensor-p-2930.html
-//	Occupancy detection for Smart Builidng scenario
+// https://www.seeedstudio.com/Grove-mini-PIR-motion-sensor-p-2930.html
+// Occupancy detection for Smart Builidng scenario
 //
 namespace PIRSensorEnd
 {
@@ -16,9 +17,9 @@ namespace PIRSensorEnd
 
 	public sealed class StartupTask : IBackgroundTask
 	{
-		private BackgroundTaskDeferral backgroundTaskDeferral = null;
+		private const int InterruptPinNumber = 24;
 		private GpioPin interruptGpioPin = null;
-		private const int interruptPinNumber = 24;
+		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 
 		public void Run(IBackgroundTaskInstance taskInstance)
 		{
@@ -26,10 +27,10 @@ namespace PIRSensorEnd
 			{
 				GpioController gpioController = GpioController.GetDefault();
 
-				interruptGpioPin = gpioController.OpenPin(interruptPinNumber);
+				interruptGpioPin = gpioController.OpenPin(InterruptPinNumber);
 				interruptGpioPin.SetDriveMode(GpioPinDriveMode.InputPullDown);
 
-				interruptGpioPin.ValueChanged += InterruptGpioPin_ValueChanged; ;
+				interruptGpioPin.ValueChanged += InterruptGpioPin_ValueChanged; 
 			}
 			catch (Exception ex)
 			{

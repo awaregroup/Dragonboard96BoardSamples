@@ -1,10 +1,11 @@
-﻿// BME280 sensor - Temperature, Humidity and Air pressure
-//  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
+﻿// TODO : Customer friendly (C) notice required
+// BME280 sensor - Temperature, Humidity and Air pressure
+// https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
 //
 // Grove BME280 Sensor in I2C1 (3V3)
-//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+// https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
 //
 namespace BME280SensorEnd
 {
@@ -12,15 +13,16 @@ namespace BME280SensorEnd
 	using System.Diagnostics;
 	using System.Threading;
 	using Windows.ApplicationModel.Background;
+
 	using Glovebox.IoT.Devices.Sensors;
 
 	public sealed class StartupTask : IBackgroundTask
 	{
-		private BackgroundTaskDeferral backgroundTaskDeferral = null;
-		private BME280 bme280Sensor;
-		private Timer bme280InputPollingTimer;
 		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
+		private BME280 bme280Sensor;
+		private Timer bme280InputPollingTimer;
+		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 
 		public void Run(IBackgroundTaskInstance taskInstance)
 		{
