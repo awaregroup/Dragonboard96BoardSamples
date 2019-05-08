@@ -1,16 +1,17 @@
-﻿// BME280 sensor - Temperature, Humidity and Air pressure
+﻿// TODO : Customer friendly (C) notice required
+// BME280 sensor - Temperature, Humidity and Air pressure
 //  https://github.com/gloveboxes/Windows-IoT-Core-Driver-Library
 //
 // Need to add a NuGet reference to Units.net V3.34 @ April 2019
 //
 // Grove BME280 Sensor in I2C1 (3V3)
-//		https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
+// https://www.seeedstudio.com/Grove-Temp-Humi-Barometer-Sensor-BME280.html
 //
 // Grove LED in socket G4
-//		https://www.seeedstudio.com/Grove-Red-LED-p-1142.html
-//		https://www.seeedstudio.com/Grove-Green-LED.html
-//		https://www.seeedstudio.com/Grove-Blue-LED.html
-//		https://www.seeedstudio.com/Grove-White-LED-p-1140.html
+// https://www.seeedstudio.com/Grove-Red-LED-p-1142.html
+// https://www.seeedstudio.com/Grove-Green-LED.html
+// https://www.seeedstudio.com/Grove-Blue-LED.html
+// https://www.seeedstudio.com/Grove-White-LED-p-1140.html
 //
 // Toggle the status of the LED with an "ActuatorToggle" method calls and remotely reboot the device with a "RestartDevice" method call
 //
@@ -20,26 +21,26 @@ namespace AzureIoTHubClientMethodHandlerEnd
 	using System.Diagnostics;
 	using System.Text;
 	using System.Threading;
+	using System.Threading.Tasks;
 
 	using Microsoft.Azure.Devices.Client;
 	using Windows.ApplicationModel.Background;
-
-	using Newtonsoft.Json;
-	using Glovebox.IoT.Devices.Sensors;
-	using Windows.System;
-	using System.Threading.Tasks;
 	using Windows.Devices.Gpio;
+	using Windows.System;
+
+	using Glovebox.IoT.Devices.Sensors;
+	using Newtonsoft.Json;
 
 	public sealed class StartupTask : IBackgroundTask
 	{
 		private const string AzureIoTHubConnectionString = "HostName=Build2019Test.azure-devices.net;DeviceId=DragonBoard410C;SharedAccessKey=ewbUCMtd6Blau9vaQBqO/J6GlSxgbxPM5aWRgZz6N7c=";
+		private const int OutputGpioPinNumber = 35;
 		private readonly TimeSpan timerDue = new TimeSpan(0, 0, 10);
 		private readonly TimeSpan timerPeriod = new TimeSpan(0, 0, 30);
-		private readonly TimeSpan DeviceRestartPeriod = new TimeSpan(0, 0, 45);
+		private readonly TimeSpan deviceRestartPeriod = new TimeSpan(0, 0, 45);
 		private BackgroundTaskDeferral backgroundTaskDeferral = null;
 		private BME280 bme280Sensor;
 		private Timer bme280InputPollingTimer;
-		private readonly int outputGpioPinNumber = 35;
 		private GpioPin outputGpioPin = null;
 		private DeviceClient azureIoTHubClient = null;
 
@@ -59,7 +60,7 @@ namespace AzureIoTHubClientMethodHandlerEnd
 			try
 			{
 				GpioController gpioController = GpioController.GetDefault();
-				outputGpioPin = gpioController.OpenPin(outputGpioPinNumber);
+				outputGpioPin = gpioController.OpenPin(OutputGpioPinNumber);
 				outputGpioPin.SetDriveMode(GpioPinDriveMode.Output);
 				outputGpioPin.Write(GpioPinValue.Low);
 			}
@@ -102,7 +103,6 @@ namespace AzureIoTHubClientMethodHandlerEnd
 
 			bme280InputPollingTimer = new Timer(SensorUpdateTimerCallback, null, timerDue, timerPeriod);
 
-			//enable task to continue running in background
 			backgroundTaskDeferral = taskInstance.GetDeferral();
 		}
 
@@ -123,7 +123,7 @@ namespace AzureIoTHubClientMethodHandlerEnd
 				{
 					Temperature = temperature.DegreesCelsius,
 					Humidity = humidity,
-					AirPressure = airPressure.Kilopascals
+					AirPressure = airPressure.Kilopascals,
 				};
 
 				string payloadText = JsonConvert.SerializeObject(sensorPayload);
@@ -151,7 +151,7 @@ namespace AzureIoTHubClientMethodHandlerEnd
 				bme280InputPollingTimer.Change(Timeout.Infinite, Timeout.Infinite);
 			}
 
-			ShutdownManager.BeginShutdown(ShutdownKind.Restart, DeviceRestartPeriod);
+			ShutdownManager.BeginShutdown(ShutdownKind.Restart, deviceRestartPeriod);
 
 			return new MethodResponse(200);
 		}
@@ -168,6 +168,7 @@ namespace AzureIoTHubClientMethodHandlerEnd
 			{
 				outputGpioPin.Write(GpioPinValue.High);
 			}
+
 			return new MethodResponse(200);
 		}
 #pragma warning restore 1998
@@ -176,7 +177,9 @@ namespace AzureIoTHubClientMethodHandlerEnd
 	public sealed class SensorPayloadDto
 	{
 		public double Temperature { get; set; }
+
 		public double Humidity { get; set; }
+
 		public double AirPressure { get; set; }
 	}
 }
